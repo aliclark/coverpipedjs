@@ -4,6 +4,8 @@
 var net = require('net');
 var cl = require('./coverlib');
 
+var user_map = {}
+
 function cc_connected(cc_c) {
 
     function cc_c_on_error(e) {
@@ -19,6 +21,7 @@ function cc_connected(cc_c) {
     }
 
     function cc_c_on_close() {
+	user_map[9000] -= 1;
 	console.log('nc   <-> 7000 closed');
     }
 
@@ -43,6 +46,22 @@ function cc_connected(cc_c) {
 	cl.encovering_pipe(cc_c, cs);
 	cl.decovering_pipe(cs, cc_c);
     }
+
+    if (!(9000 in user_map)) {
+	user_map[9000] = 0;
+    }
+
+    if (user_map[9000] >= 1) {
+	console.log('rejecting connection, already have one');
+	// connecting to the same location twice is almost certainly a
+	// mistake, may indicate once cover connection per short-lived
+	// request, which would still be very bad. Use pipemux
+	// instead.
+	cc_c.end();
+	return;
+    }
+
+    user_map[9000] += 1;
 
     console.log('nc   <-> 7000 connected');
     cc_c.on('error', cc_c_on_error);
