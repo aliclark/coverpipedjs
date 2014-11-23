@@ -68,7 +68,7 @@ function cc_connected(cc_c) {
     cc_c.on('close', cc_c_on_close);
     cc_c.on('end', cc_c_on_end);
 
-    var cs = net.connect({ allowHalfOpen: true, port: 9000 }, cs_connected);
+    var cs = net.connect({ allowHalfOpen: true, port: parseInt(process.argv[2], 10) }, cs_connected);
     cs.on('error', cs_on_error);
     cs.on('close', cs_on_close);
     cs.on('end', cs_on_end);
@@ -80,7 +80,7 @@ function cc_listening() {
 
 function main() {
     var cc = net.createServer({ allowHalfOpen: true }, cc_connected);
-    cc.listen(7000, cc_listening);
+    cc.listen(parseInt(process.argv[3], 10), cc_listening);
 }
 
 main();
