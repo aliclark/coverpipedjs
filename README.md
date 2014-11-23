@@ -1,7 +1,7 @@
 coverpiped
 ==========
 
-{ssh,mutt} | pipemux | coverpipe | spiped -e | ~~~~ | spiped -d | coverpiped | pipemuxd | {sshd,postfix}
+{ssh,mutt} | muxpipe | coverpipe | spiped -e | ~~~~ | spiped -d | coverpiped | muxpiped | {sshd,postfix}
 
 What it does
 ------------
@@ -30,8 +30,8 @@ indistinguishable to the real data for an attacker. If the other end of the
 spiped is malicious they can see what is cover and what is not, but that's
 somewhat obvious.
 
-pipemux is a hypothesized utility that has 3 client operations and 2 server
-operations:
+[muxpipe](https://github.com/aliclark/muxpipedjs) is a utility that has 3
+client operations and 2 server operations:
 
 Open a connection and optionally if successful write some data to it
 [1] [uint15 len] [uint16 connid] [uint8 portid] [0-2^15 data...]
@@ -52,7 +52,7 @@ With this arrangement:
  - counterintuitively this has lower latency than otherwise, because the TCP
    connection is already handshaked, so data can be sent immediately
 
-Combining pimemux and coverpipe into one utility would remove the duplicated
+Combining muxpipe and coverpipe into one utility would remove the duplicated
 length field, but is initially separate for clarity and extensibility.
 
 Exit use-case
