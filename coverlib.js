@@ -1,4 +1,6 @@
 
+"use strict";
+
 // Try reading from src and pushing into the functioned dst as fast as
 // it can accept without buffering.
 
