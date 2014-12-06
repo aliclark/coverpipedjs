@@ -139,10 +139,18 @@ Example
 -------
 
 piper.sh creates both the listen side and connecting side pipes on localhost
-for testing:
+for testing.
+
+To set up an encrypted 40KB/s constant cover pipe to localhost ssh and http,
+use:
 
 dd if=/dev/urandom bs=32 count=1 of=keyfile
 
-./piper.sh -s 8080 -t 80 -k keyfile
+./piper.sh -s 8022 -s 8080 -t 22 -t 80 -k keyfile
+
+Then at any time secure, low latency http requests and ssh connections can be
+made with no additional connection metadata being visible:
 
 curl http://localhost:8080
+
+ssh -p 8022 localhost
