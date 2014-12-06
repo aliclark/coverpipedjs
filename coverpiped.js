@@ -55,11 +55,14 @@ function cs_connected(cs) {
     ss.on('end', ss_on_end);
 }
 
-function server_listening() {
-    console.log('9000 listening');
-}
+var lport;
+var dport;
 
 function main() {
+    function server_listening() {
+	console.log('listening on port ' + server.address().port);
+    }
+
     var server = net.createServer({ allowHalfOpen: true }, cs_connected);
     server.listen(parseInt(process.argv[2], 10), server_listening);
 }

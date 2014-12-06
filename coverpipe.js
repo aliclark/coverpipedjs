@@ -74,11 +74,10 @@ function cc_connected(cc_c) {
     cs.on('end', cs_on_end);
 }
 
-function cc_listening() {
-    console.log('7000 listening');
-}
-
 function main() {
+    function cc_listening() {
+	console.log('listening on port ' + cc.address().port);
+    }
     var cc = net.createServer({ allowHalfOpen: true }, cc_connected);
     cc.listen(parseInt(process.argv[3], 10), cc_listening);
 }
