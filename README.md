@@ -131,3 +131,14 @@ TODO
    for proxies since it actually adds a fingerprint (albeit different from the
    original fast-as-possible one).
 
+Example
+-------
+
+piper.sh creates both the listen side and connecting side pipes on localhost
+for testing:
+
+dd if=/dev/urandom bs=32 count=1 of=keyfile
+
+./piper.sh -s 8080 -t 80 -k keyfile
+
+curl http://localhost:8080
