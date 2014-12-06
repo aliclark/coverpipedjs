@@ -111,12 +111,16 @@ means buffering
 b) coverpiped could implement a send window and ack system to give implied
 feedback to the sender about when it can send more real data
 
+c) do nothing - most onward connections will probably accept data immediately
+
 (b) is more work but a better solution, since it passes along the feedback
 instead of buffering indefinitely. I'm looking at similar ideas for muxpiped,
 but for efficiency in that case.
 
 TODO
 ----
+
+ - Find a solution to an onward connection not accepting fast enough
 
  - Should TCP no-delay be considered to try to get some low latency back?
 
