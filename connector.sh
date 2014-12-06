@@ -77,7 +77,5 @@ while [ -z "$covp" ]; do
 done
 echo coverpipe listening on $covp "(terminates to $sport)"
 
-nodejs ~/projects/muxpipedjs/muxpipe.js $covp $sources &
 echo muxpipe listening on $sources "(terminates $covp)"
-
-wait
+nodejs ~/projects/muxpipedjs/muxpipe.js $covp $sources

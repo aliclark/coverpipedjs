@@ -52,6 +52,4 @@ sport="$(( ((RANDOM<<15)|RANDOM) % 63001 + 2000 ))"
 
 ./listener.sh -s $sport $services -k $keyfile &
 sleep 3
-./connector.sh -t $sport $sources -k $keyfile &
-
-wait
+./connector.sh -t $sport $sources -k $keyfile

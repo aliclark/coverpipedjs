@@ -88,8 +88,5 @@ while [ -z "$covp" ]; do
 done
 echo coverpiped is listening on $covp "(terminates to $muxp)"
 
-spiped -F -d -s "[0.0.0.0]:$lport" -t "[127.0.0.1]:$covp" -k "$keyfile" &
-
 echo "spiped -d" is listening on $lport "(terminates to $covp)"
-
-wait
+spiped -F -d -s "[0.0.0.0]:$lport" -t "[127.0.0.1]:$covp" -k "$keyfile"
