@@ -228,7 +228,7 @@ function decoverer(dst, on_write_complete) {
 	    if (!drained) {
 		awaiting_drain = true;
 		c_rem_buf = data;
-		dst.once('drain', contine_writing);
+		dst.once('drain', continue_writing);
 		return;
 	    }
 	}
