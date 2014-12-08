@@ -76,49 +76,54 @@ function interval_functioning_pipe(src, dst, fn, interval) {
 	var pos = 0;
 
 	var inlen;
-	var rem;
+	var wrlen;
+	var num_zeroes;
 	var cover_header;
 
 	if (finish_cover) {
-	    data[0] = cover_split[1];
+	    data[pos] = cover_split[1];
 	    pos += 1;
 	    finish_cover = false;
 	}
 
-	while (pos < need_len) {
-	    if (input_buffer !== null) {
-		inlen = Math.min(input_buffer.length, (need_len - 2));
-		data.writeUInt16LE(inlen, pos);
-		input_buffer.copy(data, pos+2, 0, inlen);
-		input_buffer = (inlen === input_buffer.length) ? null : input_buffer.slice(inlen);
-		pos += 2 + inlen;
-		continue;
-	    }
+	if ((input_buffer === null) && read_available) {
+	    input_buffer = src.read();
+	    read_available = false;
+	}
+	if (input_buffer !== null) {
+	    inlen = need_len - 2;
 
-	    // reaching here means we didn't have enough real data
-	    // from last time - read more if possible.
-	    if (read_available) {
-		input_buffer = src.read();
-		console.log('src   -> ' + src.localPort + ' ' + (input_buffer === null ? null : input_buffer.length));
+	    if ((input_buffer.length < inlen) && read_available) {
+		input_buffer = Buffer.concat([input_buffer, src.read()]);
 		read_available = false;
-
-		if (data === null) {
-		    console.log('read null data');
-		}
-		continue;
 	    }
 
-	    // reaching here means we need to make up some cover.
-	    if ((pos + 1) === need_len) {
-		data[pos] = cover_split[0];
-		pos += 1;
-		finish_cover = true;
-	    } else {
-		rem = need_len - pos;
-		data.fill(0, pos);
-		data.writeUInt16LE(0x8000 | (rem - 2), pos);
-		pos += rem;
+	    wrlen = Math.min(input_buffer.length, inlen);
+
+	    data.writeUInt16LE(wrlen, pos);
+	    pos += 2;
+	    input_buffer.copy(data, pos, 0, wrlen);
+	    pos += wrlen;
+	    input_buffer = (wrlen === input_buffer.length) ? null : input_buffer.slice(wrlen);
+
+	    if (wrlen === inlen) {
+		// no cover needed
+		dc(data);
+		pipe_busy = true;
+		return;
 	    }
+	}
+
+	if ((pos + 1) === need_len) {
+	    data[pos] = cover_split[0];
+	    pos += 1;
+	    finish_cover = true;
+	} else {
+	    num_zeroes = (need_len - pos) - 2;
+	    data.writeUInt16LE(0x8000 | num_zeroes, pos);
+	    pos += 2;
+	    data.fill(0, pos);
+	    pos += num_zeroes;
 	}
 
 	// fling it at the wire
