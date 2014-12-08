@@ -245,9 +245,8 @@ function decoverer(dst, on_write_complete) {
 function encoverer(dst, on_write_complete) {
 
     function continue_writing_data() {
-	var data = c_rem_data;
 	awaiting_drain = false;
-	write_func(data);
+	setTimeout(on_write_complete, 0);
     }
 
     function write_func(data) {
@@ -268,7 +267,6 @@ function encoverer(dst, on_write_complete) {
 
 	if (!drained) {
 	    awaiting_drain = true;
-	    c_rem_data = data;
 	    dst.once('drain', continue_writing_data);
 	    return;
 	}
