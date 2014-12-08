@@ -1,6 +1,10 @@
 
 "use strict";
 
+function log(x) {
+    console.log(Date.now() + ' ' + x);
+}
+
 // Try reading from src and pushing into the functioned dst as fast as
 // it can accept without buffering.
 
