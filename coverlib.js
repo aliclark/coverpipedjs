@@ -143,7 +143,7 @@ function interval_functioning_pipe(src, dst, fn, interval) {
 
     src.on('readable', src_on_readable);
 
-    setTimeout(send_something, interval);
+    setTimeout(send_something, 0);
 }
 
 // Pass some cover data in, it will be parsed and each non-cover chunk
