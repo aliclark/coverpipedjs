@@ -27,10 +27,10 @@ function functioning_pipe(src, dst, fn) {
 	}
 
 	var data = src.read();
-	console.log(src.localPort + '  -> ' + dst.remotePort + ' ' + (data === null ? null : data.length));
+	log('funcpipe\t' + src.localPort + '  -> ' + dst.remotePort + ' ' + (data === null ? null : data.length));
 
 	if (data === null) {
-	    console.log('unexpected null data from client');
+	    log('funcpipe\t' + 'unexpected null data from client');
 	    return;
 	}
 
@@ -122,7 +122,7 @@ function interval_functioning_pipe(src, dst, fn, interval) {
 	}
 
 	// fling it at the wire
-	console.log(src.localPort + ' -> ' + dst.remotePort + ' ' + data.length);
+	log('ssomething\t' + src.localPort + ' -> ' + dst.remotePort + ' ' + data.length);
 	dc(data);
 	pipe_busy = true;
     }
@@ -205,7 +205,7 @@ function decoverer(dst, on_write_complete) {
 	    if (c_bytes_rem >= data.length) {
 
 		if (!c_in_cover) {
-		    console.log('src  ->  ' + dst.remotePort + ' ' + data.length);
+		    log('decover \t' + 'full ->  ' + dst.remotePort + ' ' + data.length);
 		    drained = dst.write(data);
 		}
 		c_bytes_rem -= data.length;
@@ -219,7 +219,7 @@ function decoverer(dst, on_write_complete) {
 	    }
 
 	    if (!c_in_cover) {
-		console.log('src  ->  ' + dst.remotePort + ' ' + data.slice(0, c_bytes_rem).length);
+		log('decover \t' + 'part ->  ' + dst.remotePort + ' ' + data.slice(0, c_bytes_rem).length);
 		drained = dst.write(data.slice(0, c_bytes_rem));
 	    }
 	    data = data.slice(c_bytes_rem);
@@ -257,12 +257,12 @@ function encoverer(dst, on_write_complete) {
 	}
 
 	if (data === null) {
-	    console.log('unexpected null data from server');
+	    log('encover \t' + 'unexpected null data from server');
 	    setTimeout(on_write_complete, 0);
 	    return;
 	}
 
-	console.log('src  ->  ' + dst.remotePort + ' ' + data.length);
+	log('encover \t' + 'src  ->  ' + dst.remotePort + ' ' + data.length);
 	drained = dst.write(data);
 
 	if (!drained) {
