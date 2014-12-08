@@ -251,10 +251,7 @@ function encoverer(dst, on_write_complete) {
     }
 
     function write_func(data) {
-
-	var chunk;
 	var drained;
-	var header = new Buffer(2);
 
 	if (awaiting_drain) {
 	    throw new Error('Please await drain before writing more');
